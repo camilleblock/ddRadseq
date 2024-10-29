@@ -57,7 +57,7 @@ SAMtools
 samtools view -bS A005D02.sam | samtools sort > A005D02.bam
 ```
 # Run gstacks
-This code is still in the testing phase as I am struggling to create the popmap that stacks desires. (./stacks may actually be ./Camille because that is the directory I want it to go into.
+I fixed my popmap so I am ready to run gstacks.
 ```bash
 gstacks -I ./bamfiles -O ./gstacks_out -M Dan_info.txt -t 2
 ```
