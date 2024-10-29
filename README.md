@@ -8,7 +8,9 @@ This repo explains a basic pipeline for ddRADseq analysis. It was developed as p
 Contact: Camille Block (camilleblock@vt.edu)
 
 To do (before finalized):
-
+- [ ] Make population map (Stacks doesn't like present format)
+- [ ] Run gstacks in stacks
+- [ ] Run populations in stacks 
 
 # Install Stacks using EasyBuild
 If installation via module load is not available for Stacks use the following EasyBuild code to install the software in your linux environment. Please note that you must select the versions of EasyBuild and Stacks that will work for your pipeline which may alter this code.
@@ -54,5 +56,13 @@ bowtie2 -q --phred33 -N 1 -p 8 -x Danaus -1 A005D02.1.fq -2 A005D02.2.fq -S A005
 SAMtools
 samtools view -bS A005D02.sam | samtools sort > A005D02.bam
 ```
-
-Footer
+# Run gstacks
+This code is still in the testing phase as I am struggling to create the popmap that stacks desires. (./stacks may actually be ./Camille because that is the directory I want it to go into.
+```bash
+gstacks -I ./bam -O ./stacks -M ./popmap -t 2
+```
+# Generate statistics using populations
+Using populations I will be able to calculate π, FIS, and FST.  Each individual was assigned to their sampling locale in the popmap, with loci present in at least 50% of individuals (--R 0.5), global minor allele frequency of 5% (--min-maf 0.05), and one random SNP per stack. 
+```bash
+populations -P ./stacks/ --popmap ./samples/popmap --smooth -r 0.55 -min-maf 0.05 -t 8 --write-random-snp
+```
