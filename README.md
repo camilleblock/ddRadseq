@@ -8,7 +8,6 @@ This repo explains a basic pipeline for ddRADseq analysis. It was developed as p
 Contact: Camille Block (camilleblock@vt.edu)
 
 To do (before finalized):
-- [ ] Make population map (Stacks doesn't like present format)
 - [ ] Run gstacks in stacks
 - [ ] Run populations in stacks 
 
