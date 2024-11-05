@@ -55,7 +55,7 @@ samtools view -bS A005D02.sam | samtools sort > A005D02.bam
 ```
 # Run gstacks
 gstacks identifies SNPs within the meta population for each locus and then genotypes each individual at each identified SNP. It also phases the SNPs at each locus into haplotypes.
-Before running gstacks make sure your pop map fits the correct format. This map should contain all necessary information about the sampling site and should be saved in .txt file. In the example, the numbered groups correspond to levels of socioeconomic status.
+Before running gstacks make sure your pop map fits the correct format. This map should contain all necessary information about the sampling site and should be saved in .txt file. I recommend making the text file in linux using the nano command. In the example, the numbered groups correspond to levels of socioeconomic status.
 
 Example pop map format:
 
@@ -79,9 +79,9 @@ G15D01	G15	Guelph_Fifth
 gstacks -I ./bamfiles -O ./gstacks_out -M Dan_info.txt -t 2
 ```
 # Generate statistics using populations
-Using populations I will be able to calculate π, FIS, and FST.  Each individual was assigned to their sampling locale in the popmap, with loci present in at least 50% of individuals (--R 0.5), global minor allele frequency of 5% (--min-maf 0.05), and one random SNP per stack. Populations also exports SNP data into standard output formats.
+Using populations I will be able to calculate π, FIS, and FST.  Each individual was assigned to their sampling locale in the popmap, with loci present in at least 50% of individuals (--R 0.5), global minor allele frequency of 5% (--min-maf 0.05), and one random SNP per stack. Populations also exports SNP data into standard output formats (.tsv). Before running make sure to make a gstacks folder and add gstacks outputs to this folder.
 ```bash
-populations -P ./gstacks/ --popmap ./Dan_info.txt --smooth -r 0.55 -min-maf 0.05 -t 8 --write-random-snp
+populations -P ./gstacks/ --popmap ./Dan_info.txt --smooth -r 0.55 --min-maf 0.05 -t 8 --write-random-snp
 ```
 # References
 https://catchenlab.life.illinois.edu/stacks/
