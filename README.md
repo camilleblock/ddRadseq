@@ -83,6 +83,20 @@ Using populations I will be able to calculate π, FIS, and FST.  Each individual
 ```bash
 populations -P ./gstacks/ --popmap ./Dan_info.txt --smooth -r 0.55 --min-maf 0.05 -t 8 --write-random-snp
 ```
+# Generate VCF files using BCFtools
+Change GCA_049903775.1_ASM4990377v1_genomic.fna into the fasta file of the genome you alined too. Change all the .bam files into your actual bam files. Make sure to change the name of the vcf.gz file each time.
+
+```bash
+module load BCFtools/1.21-GCC-13.3.0
+bcftools mpileup -Ou -f GCA_049903775.1_ASM4990377v1_genomic.fna P29.bam P30.bam P31.bam P33a.bam P33b.bam P35.bam P36.bam P37.bam P38.bam P4.bam P40.bam P41.bam P42.bam P43.bam P44.bam P46.bam P47.bam P49.bam P51.bam P52a.bam P52b.bam P53.bam P54a.bam P54b.bam P54c.bam P55.bam P56.bam P57.bam P58.bam P59.bam | bcftools call -vmO z -o snps1.vcf.gz
+```
+# Index and combine VCF files 
+You first have to index each file using bcftools index and then you can comine them using bcftools merge.
+```bash
+bcftools index -t snps1.vcf.gz
+bcftools merge snps*.vcf.gz -Oz -o snps_merged.vcf.gz
+```
+
 # References
 https://catchenlab.life.illinois.edu/stacks/
 
