@@ -9,7 +9,7 @@ Contact: Camille Block (camilleblock@vt.edu)
 
 # Create a Slurm Script
 Slurm scripts always start with the below: 
-
+```bash
 #!/bin/bash
 #SBATCH --nodes=2
 #SBATCH --cpus-per-task=20
@@ -17,6 +17,7 @@ Slurm scripts always start with the below:
 #SBATCH --job-name STACKS
 #SBATCH --account=bedbug
 #SBATCH --partition=normal_q
+```
 
 # Install Stacks using EasyBuild
 If installation via module load is not available for Stacks use the following EasyBuild code to install the software in your linux environment. Please note that you must select the versions of EasyBuild and Stacks that will work for your pipeline which may alter this code.
