@@ -7,7 +7,7 @@ This repo explains a basic pipeline for ddRADseq analysis. It was developed as p
 
 Contact: Camille Block (camilleblock@vt.edu)
 
-#Make a Slurm Script
+# Create a Slurm Script
 Slurm scripts always start with the below: 
 
 #!/bin/bash
