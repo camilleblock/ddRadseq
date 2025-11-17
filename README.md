@@ -123,6 +123,15 @@ You first have to index each file using bcftools index and then you can comine t
 bcftools index -t snps1.vcf.gz
 bcftools merge snps*.vcf.gz -Oz -o snps_merged.vcf.gz
 ```
+# Helpful Linux commands
+```bash
+emacs file.sh   #lets you edit text file or slurm script
+dos2unix file.txt  #converts text file from windows into something usable. Do this after reading in any txt file.
+tail file.txt  #prints the last few lines of a file
+sbatch file.sh  #runs a slurm script
+squeue camilleblock  #tells you how long a slurm script has been running for
+scancel camilleblock  #stops all running slurm scripts
+```
 
 # References
 https://catchenlab.life.illinois.edu/stacks/
