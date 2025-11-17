@@ -3,10 +3,20 @@
 Image from: https://catchenlab.life.illinois.edu/stacks/manual/
 # Introduction
 This page is a work in progress!
-This repo explains a basic pipeline for ddRADseq analysis. It was developed as part of curriculum for Virginia Tech's Intro to Genomic Data Science course. This pipeline runs in Linux and relies on Stacks (version Stacks/2.62-foss-2022a), Bowtie2 (version Bowtie2/2.4.5-GCC-11.3.0), and samtools (version SAMtools/1.16.1-GCC-11.3.0).
+This repo explains a basic pipeline for ddRADseq analysis. It was developed as part of curriculum for Virginia Tech's Intro to Genomic Data Science course. This pipeline runs in Linux and relies on Stacks (version Stacks/2.62-foss-2022a), Bowtie2 (version Bowtie2/2.4.5-GCC-11.3.0), samtools (version SAMtools/1.16.1-GCC-11.3.0), and BCFtools (version BCFtools/1.21-GCC-13.3.0). For this entire pipeline it may be necessary to split each step up into smaller sample groups. All code should be run in scratch.
 
 Contact: Camille Block (camilleblock@vt.edu)
 
+#Make a Slurm Script
+Slurm scripts always start with the below: 
+
+#!/bin/bash
+#SBATCH --nodes=2
+#SBATCH --cpus-per-task=20
+#SBATCH --time=12:00:00
+#SBATCH --job-name STACKS
+#SBATCH --account=bedbug
+#SBATCH --partition=normal_q
 
 # Install Stacks using EasyBuild
 If installation via module load is not available for Stacks use the following EasyBuild code to install the software in your linux environment. Please note that you must select the versions of EasyBuild and Stacks that will work for your pipeline which may alter this code.
@@ -21,6 +31,10 @@ module load Stacks #testing if install worked
 If your sequences have already been demultiplexed skip this step. Use this step if given raw reads from Illumina sequencing. In order to run this step you must know what restriction enzymes were used in sequencing. 
 ```bash
 process_radtags -p ./in_dir -P -b barcodes.txt -o ./out_dir –renz-2 sphI mluCI –threads 16 -q -r -D -t 120
+```
+OR
+```bash
+process_radtags -P -p ./lib5/ -b ./ddRADPool5.txt -o ./process_rad --renz_1 pstI --renz_2 mspI -c -q -r --disable_rad_check -i gzfastq --inline-null -t 120
 ```
 # Download reference genome via ncbi
 To start this step ensure that your species has a reference genome on ncbi and find its genome accession number. This code must be edited to fit your target species.
@@ -54,7 +68,7 @@ module load SAMtools
 samtools view -bS A005D02.sam | samtools sort > A005D02.bam
 ```
 # Align and convert 
-The above two steps can also be done in this for loop
+The above two steps can also be done in this for-loop.
 ```bash
 module load Bowtie2/2.5.4-GCC-13.2.0
 module load SAMtools/1.21-GCC-13.3.0
@@ -67,11 +81,11 @@ while IFS= read -r i; do
 ```
 # Run gstacks
 gstacks identifies SNPs within the meta population for each locus and then genotypes each individual at each identified SNP. It also phases the SNPs at each locus into haplotypes.
-Before running gstacks make sure your pop map fits the correct format. This map should contain all necessary information about the sampling site and should be saved in .txt file. I recommend making the text file in linux using the nano command. In the example, the numbered groups correspond to levels of socioeconomic status.
+Before running gstacks make sure your pop map fits the correct format. This map should contain all necessary information about the sampling site and should be saved in .txt file. I recommend making the text file in linux using the nano command. In the example, the numbered groups correspond to levels of socioeconomic status. Each column is separated by a tab.
 
 Example pop map format:
 
-A005D02	A0005	Toronto_Fifth
+A005D02 A0005	Toronto_Fifth
 
 A025D01	A025	Toronto_Second
 
