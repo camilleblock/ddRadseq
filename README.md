@@ -53,6 +53,18 @@ This code turns files into bamfiles which are smaller and easier for programs to
 module load SAMtools
 samtools view -bS A005D02.sam | samtools sort > A005D02.bam
 ```
+# Convert from samfile to bamfile using samtools
+The above two steps can also be done in this for loop
+```bash
+module load Bowtie2/2.5.4-GCC-13.2.0
+module load SAMtools/1.21-GCC-13.3.0
+
+while IFS= read -r i; do
+ bowtie2 -q --phred33 -N 1 -p 8 -x Cimex
+        -1 "${i}.1.fq.gz" -2 "${i}.2.fq.gz" -S ${i}.sam |
+            samtools view -bS "${i}.sam" | samtools sort -o "${i}.sorted.bam"
+        done < samples1.txt
+```
 # Run gstacks
 gstacks identifies SNPs within the meta population for each locus and then genotypes each individual at each identified SNP. It also phases the SNPs at each locus into haplotypes.
 Before running gstacks make sure your pop map fits the correct format. This map should contain all necessary information about the sampling site and should be saved in .txt file. I recommend making the text file in linux using the nano command. In the example, the numbered groups correspond to levels of socioeconomic status.
