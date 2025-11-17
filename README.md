@@ -29,7 +29,7 @@ eb -r /apps/easybuild/software/tinkercliffs-rome/EasyBuild/4.9.4/easybuild/easyc
 module load Stacks #testing if install worked
 ```
 # Process radtags 
-If your sequences have already been demultiplexed skip this step. Use this step if given raw reads from Illumina sequencing. In order to run this step you must know what restriction enzymes were used in sequencing. 
+If your sequences have already been demultiplexed skip this step. Use this step if given raw reads from Illumina sequencing. In order to run this step you must know what restriction enzymes were used in sequencing. Use dos2unix on .txt file if using a pc.
 ```bash
 process_radtags -p ./in_dir -P -b barcodes.txt -o ./out_dir –renz-2 sphI mluCI –threads 16 -q -r -D -t 120
 ```
@@ -131,6 +131,7 @@ tail file.txt  #prints the last few lines of a file
 sbatch file.sh  #runs a slurm script
 squeue camilleblock  #tells you how long a slurm script has been running for
 scancel camilleblock  #stops all running slurm scripts
+module spider program.name  #searches for a program on Linux 
 ```
 
 # References
