@@ -53,7 +53,7 @@ This code turns files into bamfiles which are smaller and easier for programs to
 module load SAMtools
 samtools view -bS A005D02.sam | samtools sort > A005D02.bam
 ```
-# Convert from samfile to bamfile using samtools
+# Align and convert 
 The above two steps can also be done in this for loop
 ```bash
 module load Bowtie2/2.5.4-GCC-13.2.0
