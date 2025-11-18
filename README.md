@@ -129,7 +129,7 @@ emacs file.sh   #lets you edit text file or slurm script
 dos2unix file.txt  #converts text file from windows into something usable. Do this after reading in any txt file.
 tail file.txt  #prints the last few lines of a file
 sbatch file.sh  #runs a slurm script
-squeue camilleblock  #tells you how long a slurm script has been running for
+squeue -u camilleblock  #tells you how long a slurm script has been running for
 scancel camilleblock  #stops all running slurm scripts
 module spider program.name  #searches for a program on Linux 
 ```
