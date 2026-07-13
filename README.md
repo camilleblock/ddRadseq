@@ -123,9 +123,13 @@ You first have to index each file using bcftools index and then you can comine t
 bcftools index -t snps1.vcf.gz
 bcftools merge snps*.vcf.gz -Oz -o snps_merged.vcf.gz
 ```
-#######################################
-# Run Admixture
-#######################################
+
+
+
+* Run ADMIXTURE
+Use ADMIXTURE, a program that uses maximum likelihood estimation to assign ancestral clusters, to find population grouping.  
+
+```bash
 module load BCFtools/1.21-GCC-13.3.0
 module load PLINK/2.00a3.7-gfbf-2023a
 module load VCFtools/0.1.16-GCC-13.2.0
@@ -142,7 +146,7 @@ module load VCFtools/0.1.16-GCC-13.2.0
 
 ##location of Admixture
 #export PATH=/home/camilleblock/.local/easybuild/software/ADMIXTURE/1.3.0-x86_64:$PATH
-##make admixture perminant
+##make admixture permanent
 #echo 'export PATH=/home/camilleblock/.local/easybuild/software/ADMIXTURE/1.3.0-x86_64:$PATH' >> ~/.bashrc
 #source ~/.bashrc
 #admixture -s 65432 snps_subset1.int75.bed 8
@@ -150,7 +154,7 @@ admixture --cv snps_subset1.int75.bed 9 > logsubset1_9.out
 #sed -E 's/(H[0-9]+) ([^ ]+)/\1_\2/g' snps_subset3.int75.fam > snps_subset3.int75_fixed.fam
 #awk '{print $1, $1, $2, $3, $4, $5}' snps_subset2.int75_fixed.fam > snps_subset2.int75_fixed1.fam
 
-
+```
 
 
 
