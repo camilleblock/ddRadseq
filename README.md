@@ -126,7 +126,7 @@ bcftools merge snps*.vcf.gz -Oz -o snps_merged.vcf.gz
 
 
 
-* Run ADMIXTURE
+# Run ADMIXTURE
 Use ADMIXTURE, a program that uses maximum likelihood estimation to assign ancestral clusters, to find population grouping.  
 
 ```bash
@@ -134,25 +134,25 @@ module load BCFtools/1.21-GCC-13.3.0
 module load PLINK/2.00a3.7-gfbf-2023a
 module load VCFtools/0.1.16-GCC-13.2.0
 
-#bcftools view -S keep1.txt snps_merged.integer.maf001.geno75.final.vcf.gz -Oz -o subset1.vcf.gz
-#tabix -p vcf subset1.vcf.gz
-#plink --vcf subset1.vcf.gz --make-bed --out snps1 --allow-extra-chr
-#plink --bfile snps1 \
-#     --maf 0.001 \
- #     --geno 0.75 \
-  #    --allow-extra-chr \
-   #   --make-bed \
-    #  --out snps_subset1.int75
+bcftools view -S keep1.txt snps_merged.integer.maf001.geno75.final.vcf.gz -Oz -o subset1.vcf.gz
+tabix -p vcf subset1.vcf.gz
+plink --vcf subset1.vcf.gz --make-bed --out snps1 --allow-extra-chr
+plink --bfile snps1 \
+     --maf 0.001 \
+      --geno 0.75 \
+      --allow-extra-chr \
+   --make-bed \
+      --out snps_subset1.int75
 
-##location of Admixture
-#export PATH=/home/camilleblock/.local/easybuild/software/ADMIXTURE/1.3.0-x86_64:$PATH
-##make admixture permanent
-#echo 'export PATH=/home/camilleblock/.local/easybuild/software/ADMIXTURE/1.3.0-x86_64:$PATH' >> ~/.bashrc
-#source ~/.bashrc
-#admixture -s 65432 snps_subset1.int75.bed 8
+location of Admixture
+export PATH=/home/camilleblock/.local/easybuild/software/ADMIXTURE/1.3.0-x86_64:$PATH
+make admixture permanent
+echo 'export PATH=/home/camilleblock/.local/easybuild/software/ADMIXTURE/1.3.0-x86_64:$PATH' >> ~/.bashrc
+source ~/.bashrc
+admixture -s 65432 snps_subset1.int75.bed 8
 admixture --cv snps_subset1.int75.bed 9 > logsubset1_9.out
-#sed -E 's/(H[0-9]+) ([^ ]+)/\1_\2/g' snps_subset3.int75.fam > snps_subset3.int75_fixed.fam
-#awk '{print $1, $1, $2, $3, $4, $5}' snps_subset2.int75_fixed.fam > snps_subset2.int75_fixed1.fam
+sed -E 's/(H[0-9]+) ([^ ]+)/\1_\2/g' snps_subset3.int75.fam > snps_subset3.int75_fixed.fam
+awk '{print $1, $1, $2, $3, $4, $5}' snps_subset2.int75_fixed.fam > snps_subset2.int75_fixed1.fam
 
 ```
 
