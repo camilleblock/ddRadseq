@@ -82,7 +82,7 @@ while IFS= read -r i; do
 ```
 # Run gstacks
 gstacks identifies SNPs within the meta population for each locus and then genotypes each individual at each identified SNP. It also phases the SNPs at each locus into haplotypes.
-Before running gstacks make sure your pop map fits the correct format. This map should contain all necessary information about the sampling site and should be saved in .txt file. I recommend making the text file in linux using the nano command. In the example, the numbered groups correspond to levels of socioeconomic status. Each column is separated by a tab.
+Before running gstacks, make sure your pop map fits the correct format. This map should contain all necessary information about the sampling site and should be saved in .txt file. I recommend making the text file in Linux using the nano command. In the example, the numbered groups correspond to levels of socioeconomic status. Each column is separated by a tab.
 
 Example pop map format:
 
@@ -106,58 +106,23 @@ G15D01	G15	Guelph_Fifth
 gstacks -I ./bamfiles -O ./gstacks_out -M Dan_info.txt -t 2
 ```
 # Generate statistics using populations
-Using populations I will be able to calculate π, FIS, and FST.  Each individual was assigned to their sampling locale in the popmap, with loci present in at least 50% of individuals (--R 0.5), global minor allele frequency of 5% (--min-maf 0.05), and one random SNP per stack. Populations also exports SNP data into standard output formats (.tsv). Before running make sure to make a gstacks folder and add gstacks outputs to this folder.
+Using populations, I will be able to calculate π, FIS, and FST.  Each individual was assigned to their sampling locale in the popmap, with loci present in at least 50% of individuals (--R 0.5), a global minor allele frequency of 5% (--min-maf 0.05), and one random SNP per stack. Populations also exports SNP data into standard output formats (.tsv). Before running, make sure to make a gstacks folder and add gstacks outputs to this folder.
 ```bash
 populations -P ./gstacks/ --popmap ./Dan_info.txt --smooth -r 0.55 --min-maf 0.05 -t 8 --write-random-snp
 ```
 # Generate VCF files using BCFtools
-Change GCA_049903775.1_ASM4990377v1_genomic.fna into the fasta file of the genome you alined too. Change all the .bam files into your actual bam files. Make sure to change the name of the vcf.gz file each time.
+Change GCA_049903775.1_ASM4990377v1_genomic.fna into the fasta file of the genome you aligned to. Change all the .bam files into your actual bam files. Make sure to change the name of the vcf.gz file each time.
 
 ```bash
 module load BCFtools/1.21-GCC-13.3.0
 bcftools mpileup -Ou -f GCA_049903775.1_ASM4990377v1_genomic.fna P29.bam P30.bam P31.bam P33a.bam P33b.bam P35.bam P36.bam P37.bam P38.bam P4.bam P40.bam P41.bam P42.bam P43.bam P44.bam P46.bam P47.bam P49.bam P51.bam P52a.bam P52b.bam P53.bam P54a.bam P54b.bam P54c.bam P55.bam P56.bam P57.bam P58.bam P59.bam | bcftools call -vmO z -o snps1.vcf.gz
 ```
 # Index and combine VCF files 
-You first have to index each file using bcftools index and then you can comine them using bcftools merge.
+You first have to index each file using bcftools index, and then you can combine them using bcftools merge.
 ```bash
 bcftools index -t snps1.vcf.gz
 bcftools merge snps*.vcf.gz -Oz -o snps_merged.vcf.gz
 ```
-
-
-
-# Run ADMIXTURE
-Use ADMIXTURE, a program that uses maximum likelihood estimation to assign ancestral clusters, to find population grouping.  
-
-```bash
-module load BCFtools/1.21-GCC-13.3.0
-module load PLINK/2.00a3.7-gfbf-2023a
-module load VCFtools/0.1.16-GCC-13.2.0
-
-bcftools view -S keep1.txt snps_merged.integer.maf001.geno75.final.vcf.gz -Oz -o subset1.vcf.gz
-tabix -p vcf subset1.vcf.gz
-plink --vcf subset1.vcf.gz --make-bed --out snps1 --allow-extra-chr
-plink --bfile snps1 \
-     --maf 0.001 \
-      --geno 0.75 \
-      --allow-extra-chr \
-   --make-bed \
-      --out snps_subset1.int75
-
-location of Admixture
-export PATH=/home/camilleblock/.local/easybuild/software/ADMIXTURE/1.3.0-x86_64:$PATH
-make admixture permanent
-echo 'export PATH=/home/camilleblock/.local/easybuild/software/ADMIXTURE/1.3.0-x86_64:$PATH' >> ~/.bashrc
-source ~/.bashrc
-admixture -s 65432 snps_subset1.int75.bed 8
-admixture --cv snps_subset1.int75.bed 9 > logsubset1_9.out
-sed -E 's/(H[0-9]+) ([^ ]+)/\1_\2/g' snps_subset3.int75.fam > snps_subset3.int75_fixed.fam
-awk '{print $1, $1, $2, $3, $4, $5}' snps_subset2.int75_fixed.fam > snps_subset2.int75_fixed1.fam
-
-```
-
-
-
 
 # Helpful Linux commands
 ```bash
